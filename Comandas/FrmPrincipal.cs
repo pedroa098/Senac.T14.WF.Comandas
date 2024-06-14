@@ -21,12 +21,18 @@ namespace Comandas
 
         private void btnComanda_Click(object sender, EventArgs e)
         {
-            new FrmComanda().ShowDialog(); 
+            new FrmComanda().ShowDialog();
         }
 
         private void btnPedidoCozinha_Click(object sender, EventArgs e)
         {
             new FrmPedidoCozinha().ShowDialog();
+        }
+
+        private void btnSair_Click(object sender, EventArgs e)
+        {
+            // encerra o aplicativo 
+            Application.Exit();
         }
     }
 }
