@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Comandas
 {
     public partial class FrmPrincipal : Form
@@ -5,6 +7,20 @@ namespace Comandas
         public FrmPrincipal()
         {
             InitializeComponent();
+            CriarBancoDeDados();
+        }
+
+        // método (visibilidade=private, retorno=void no
+        private void CriarBancoDeDados()
+        {
+            // crair uma variavel do tipo AppDbContext
+            // ursar a variavel e acessar o contexto
+            // executar a migração == F5
+            using (var banco = new AppDbContext())
+            {
+                // executa a migração(CREATE TABLE Usuarios)
+                banco.Database.Migrate();
+            }
         }
 
         // evento de click
