@@ -24,7 +24,7 @@ namespace Comandas
             Close();
         }
 
-        private void btnSalvar_Click(object sender, EventArgs e)
+        private void btnSalvar_Click_1(object sender, EventArgs e)
         {
             if (ehNovo)
                 //metodo que ira inserir usuario no banco
@@ -38,13 +38,14 @@ namespace Comandas
         private void AtualizarUsuario()
         {
             using (var banco = new AppDbContext())
-            {
+            { // consulta um usuario na tabela usando o id da tela 
                 var usuario = banco
                     .Usuarios
-                    .Where(e => e.Id == 1)
+                    .Where(e => e.Id == int.Parse(txtId.TextButton )  )                   
                     .FirstOrDefault();
-                usuario.Nome = "Vine";
-                usuario.Email = "pedro@pedro.com";
+                usuario.Nome = txtNome.TextButton;
+                usuario.Email = txtEmail.TextButton;
+                usuario.Senha = txtSenha.TextButton;
                 banco.SaveChanges();
                 throw new NotImplementedException();
             }
@@ -58,9 +59,9 @@ namespace Comandas
             {
                 //criar variavel
                 var novoUsuario = new Usuario();
-                novoUsuario.Nome = "Pedro";
-                novoUsuario.Email = "pedro12345augusto098@gmail.com";
-                novoUsuario.Senha = "123";
+                novoUsuario.Nome = txtNome.TextButton;
+                novoUsuario.Email = txtEmail.TextButton;
+                novoUsuario.Senha = txtSenha.TextButton;
                 //salvar as alterãções(INSERT INTO usuarios)
                 banco.Usuarios.Add(novoUsuario);
                 banco.SaveChanges();
@@ -82,5 +83,7 @@ namespace Comandas
         {
             ehNovo = true;
         }
+
+        
     }
 }
