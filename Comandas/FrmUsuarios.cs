@@ -17,8 +17,21 @@ namespace Comandas
         public FrmUsuarios()
         {
             InitializeComponent();
+            // metodo q lista os usuarios
+            listarUsuarios();
         }
 
+        private void listarUsuarios()
+        {
+            // conectar no banco
+            using (var banco = new AppDbContext())
+            {
+                // SELECT * FROM Usuarios, msm coisa
+                var usuarios = banco.Usuarios.ToList();
+                // Popular a tabela na tela DataGridView
+                dgvUsuarios.DataSource = usuarios;
+            }
+        }
         private void btnVoltar_Click(object sender, EventArgs e)
         {
             Close();
@@ -33,6 +46,18 @@ namespace Comandas
             else
                 //AtualizarUsuario();
                 AtualizarUsuario();
+
+            desabilitarCampos();
+            listarUsuarios();
+            limparCampos();
+        }
+
+        private void limparCampos()
+        {
+            txtId.TextButton = string.Empty;
+            txtNome.TextButton = string.Empty;
+            txtEmail.TextButton = string.Empty;
+            txtSenha.TextButton = string.Empty;
         }
 
         private void AtualizarUsuario()
@@ -41,7 +66,7 @@ namespace Comandas
             { // consulta um usuario na tabela usando o id da tela 
                 var usuario = banco
                     .Usuarios
-                    .Where(e => e.Id == int.Parse(txtId.TextButton )  )                   
+                    .Where(e => e.Id == int.Parse(txtId.TextButton))
                     .FirstOrDefault();
                 usuario.Nome = txtNome.TextButton;
                 usuario.Email = txtEmail.TextButton;
@@ -82,8 +107,27 @@ namespace Comandas
         private void btnNovo_Click(object sender, EventArgs e)
         {
             ehNovo = true;
+            habilitarCampos();
         }
 
-        
+        private void habilitarCampos()
+        {
+            txtNome.Enabled = true;
+            txtEmail.Enabled = true;
+            txtSenha.Enabled = true;
+        }
+        private void desabilitarCampos()
+        {
+            txtNome.Enabled = false;
+            txtEmail.Enabled = false;
+            txtSenha.Enabled = false;
+        }
+
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+            // indica que está ed
+            ehNovo = false;
+
+        }
     }
 }
