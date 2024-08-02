@@ -71,8 +71,7 @@ namespace Comandas
                 usuario.Nome = txtNome.TextButton;
                 usuario.Email = txtEmail.TextButton;
                 usuario.Senha = txtSenha.TextButton;
-                banco.SaveChanges();
-                throw new NotImplementedException();
+                banco.SaveChanges();   
             }
         }
 
@@ -127,6 +126,47 @@ namespace Comandas
         {
             // indica que está ed
             ehNovo = false;
+            habilitarCampos();
+
+        }
+
+        private void FrmUsuarios_Load(object sender, EventArgs e)
+        {
+            Carregarusuarios();
+        }
+
+        private void Carregarusuarios()
+        {
+            // conectar no banco
+            using (var banco = new AppDbContext())
+            {
+                // realizar uma consult na tabela usuarios
+                var usuarios = banco.Usuarios.ToList();
+                // popular os dados do grid(dataGridView
+                dgvUsuarios.DataSource = usuarios;
+            }
+
+        }
+
+        private void dgvUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //verifica se o indice da linha é maior ou igual a 0
+            // saber se existe uma inha selecionada 
+            if(e.RowIndex > 0 )
+            {
+                //MessageBox.Show("Linha selecionada " + (e.RowIndex + 1));
+
+                // obter dados la linha
+                var id = dgvUsuarios.Rows[e.RowIndex].Cells["Id"].Value.ToString();
+                var nome = dgvUsuarios.Rows[e.RowIndex].Cells["Nome"].Value.ToString();
+                var email = dgvUsuarios.Rows[e.RowIndex].Cells["Email"].Value.ToString();
+                var senha = dgvUsuarios.Rows[e.RowIndex].Cells["Senha"].Value.ToString();
+
+                txtId.TextButton = id;
+                txtNome.TextButton = nome;
+                txtEmail.TextButton = email;
+                txtSenha.TextButton = senha;
+            }
 
         }
     }
