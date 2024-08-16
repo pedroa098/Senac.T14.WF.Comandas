@@ -50,6 +50,12 @@ namespace Comandas
             desabilitarCampos();
             listarUsuarios();
             limparCampos();
+            btnNovo.Enabled = true;
+            btnEditar.Enabled = false;
+            btnSalvar.Enabled = false;
+            btnExcluir.Enabled = false;
+            btnCancelar.Enabled = false;
+
         }
 
         private void limparCampos()
@@ -71,7 +77,7 @@ namespace Comandas
                 usuario.Nome = txtNome.TextButton;
                 usuario.Email = txtEmail.TextButton;
                 usuario.Senha = txtSenha.TextButton;
-                banco.SaveChanges();   
+                banco.SaveChanges();
             }
         }
 
@@ -100,9 +106,31 @@ namespace Comandas
 
         private void btnExcluir_Click(object sender, EventArgs e)
         {
-
+            // obtem o id do usuario da tela 
+            var idusuario = Convert.ToInt32(txtId.Text);
+            // chama o método que exclui da tabela usuario
+            ExcluirUsuario(idusuario);
+            listarUsuarios();
+            limparCampos();
+            btnNovo.Enabled = true;
+            btnEditar.Enabled = false;
+            btnSalvar.Enabled = false;
+            btnExcluir.Enabled = false;
+            btnCancelar.Enabled = false;
+            MessageBox.Show("Usuário excluído com sucesso!");
         }
 
+        private void ExcluirUsuario(int idUsuario)
+        {
+            // conectar no banco de dados, consultar o usuario, avisar o banco q estou excluindo e confirmar a excluxao
+            using (var banco = new AppDbContext())
+            {
+                var usuario = banco.Usuarios.First(u => u.Id.Equals(idUsuario));
+                banco.Usuarios.Remove(usuario);
+                banco.SaveChanges()
+            }
+
+        }
         private void btnNovo_Click(object sender, EventArgs e)
         {
             ehNovo = true;
@@ -124,9 +152,14 @@ namespace Comandas
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
-            // indica que está ed
+            // indica que está ed;
             ehNovo = false;
             habilitarCampos();
+            btnSalvar.Enabled = true;
+            btnCancelar.Enabled = true;
+            btnExcluir.Enabled = false;
+            btnNovo.Enabled = false;
+            btnEditar.Enabled = false;
 
         }
 
@@ -152,7 +185,7 @@ namespace Comandas
         {
             //verifica se o indice da linha é maior ou igual a 0
             // saber se existe uma inha selecionada 
-            if(e.RowIndex > 0 )
+            if (e.RowIndex > 0)
             {
                 //MessageBox.Show("Linha selecionada " + (e.RowIndex + 1));
 
@@ -166,8 +199,25 @@ namespace Comandas
                 txtNome.TextButton = nome;
                 txtEmail.TextButton = email;
                 txtSenha.TextButton = senha;
+
+                btnEditar.Enabled = true;
+                btnNovo.Enabled = false;
+                btnSalvar.Enabled = false;
+                btnCancelar.Enabled = false;
+                btnExcluir.Enabled = true;
+                // end if(e.rowINdex >=o)
             }
 
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            limparCampos();
+            btnNovo.Enabled = true;
+            btnEditar.Enabled = false;
+            btnCancelar.Enabled = false;
+            btnSalvar.Enabled=false;
+            btnExcluir.Enabled=false;
         }
     }
 }
